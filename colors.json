@@ -1,0 +1,17 @@
+{
+    "red":{
+        "window_focus":"#d0172d",
+        "window_unfocus":"#c7162b",
+        "highlight":"#d9182f",
+        "click":"#870f1d"},
+    "white":{
+        "window_focus":"#ffffff",
+        "window_unfocus":"#fafafa",
+        "highlight":"#f5f5f5",
+        "click":"#d6d6d6"},
+    "green":{
+        "window_focus":"#11a428",
+        "window_unfocus":"#109b26",
+        "highlight":"#12ad2a",
+        "click":"#0a5b16"}
+}
