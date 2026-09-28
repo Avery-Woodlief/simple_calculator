@@ -62,6 +62,7 @@ simple_calculator_buttons = integer_buttons | binary_operation_buttons | unary_o
 button_names = list(simple_calculator_buttons.keys())
 
 import tkinter as tk
+from tkinter import ttk
 import re
 
 number_mapping = {"zero":"0", "one":"1", "two":"2", "three":"3", "four":"4", "five":"5", "six":"6", "seven":"7", "eight":"8", "nine":"9", "pi":"π"}
@@ -80,11 +81,21 @@ class Calculator(tk.Tk):
         self.geometry("364x461")
         self.expression = tk.StringVar(value="")
         self.logs = []
+        self.tree_logs = None
+        style = ttk.Style(self)
+        style.theme_use("clam")
+        style.configure(
+            "Treeview",
+            background="#fafafa",
+            fieldbackground="#fafafa",
+            foreground="black"
+        )
         self.init_display()
         self.init_buttons()
         
 
     def feed_clicked_button_name(self, button_name):
+        print(self.logs)
         if number_mapping.get(button_name, None) is not None:       
             self.expression.set(self.expression.get() + number_mapping[button_name])
         elif binary_operation_mapping.get(button_name, None) is not None:
@@ -103,7 +114,8 @@ class Calculator(tk.Tk):
             try:
                 result = eval(str(re.sub(re.escape("π"), str(math.pi), self.expression.get())))
                 print(f"result = {result}")
-                self.logs.append(str(result))
+                self.logs.append(self.expression.get()+ " = " +str(result))
+                self.tree_logs.insert('', 'end', text=self.logs[-1])
                 self.expression.set(str(result))
             except (SyntaxError, TypeError):
                 if self.expression == "":
@@ -119,9 +131,7 @@ class Calculator(tk.Tk):
             buttons_frame.columnconfigure(i, weight=1)
             buttons_frame.rowconfigure(i, weight=1)
 
-        #print(button_names)
         for button_name in button_names:
-            
             info = simple_calculator_buttons[button_name]
 
             button = tk.Button(
@@ -149,13 +159,17 @@ class Calculator(tk.Tk):
 
     def init_display(self):
         display_frame = tk.Frame(self)
+        self.tree_logs = ttk.Treeview(display_frame, height=6, show="tree")
+
+        self.tree_logs.pack(fill="x", anchor="n")
         label = tk.Label(
             display_frame,
             textvariable=self.expression,
             font=("Arial", 14),
-            anchor="e",
+            background="white",
+            anchor="w",
             padx=15,
-            pady=50
+            pady=24
         )
         label.pack(fill="both")
         display_frame.pack(fill="both")
